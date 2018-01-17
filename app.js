@@ -32,7 +32,7 @@ document.getElementById('current-1').textContent = '0';
 
 
 
-/* set up event handler  */
+/* set up event handler for the button roll  */
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
@@ -53,30 +53,64 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         document.querySelector('#current-'  + activePlayer ).textContent = roundScore;
 
     } else {
-        //Next player Ternary Opperator
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
-        roundScore = 0;
 
-        // changes the current score to 0
-        document.getElementById('current-0').textContent = 0;
-        document.getElementById('current-1').textContent = 0;
+        nextPlayer();
 
-        document.querySelector('.player-0-panel').classList.toggle('active');
-        document.querySelector('.player-1-panel').classList.toggle('active');
-
+        //document.querySelector('.dice').style.display = 'none';
         // removes the class of player-o-panel so that when
        // document.querySelector('.player-0-panel').classList.remove('active');
        // document.querySelector('.player-1-panel').classList.add('active');
 
-
-
     }
 
-})
+
+});
+
+        // event handler for Hold button
+
+document.querySelector('.btn-hold').addEventListener('click', function() {
+
+        // Add CURRENT score to GLOBAL Score
+        scores[activePlayer] += roundScore;
+
+        // Update the UI
+        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+        if (scores[activePlayer] >= 20) {
+
+            document.querySelector('#name-' + activePlayer).textContent = 'WINNER!!';
+            document.querySelector('.dice').style.display = 'none';
+            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+
+
+        } else {
+
+            // Check if player won the game
+            nextPlayer();
+
+        }
+
+
+    });
 
 
 
+function nextPlayer() {
 
+         //Next player Ternary Opperator
+         activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+         roundScore = 0;
+
+         // changes the current score to 0
+         document.getElementById('current-0').textContent = '0';
+         document.getElementById('current-1').textContent = '0';
+
+         document.querySelector('.player-0-panel').classList.toggle('active');
+         document.querySelector('.player-1-panel').classList.toggle('active');
+
+         document.querySelector('.dice').style.display = 'none';
+}
 
 
 
