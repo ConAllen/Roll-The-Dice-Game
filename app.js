@@ -13,21 +13,9 @@ GAME RULES:
 
 /* Declare your vaiables  */
 
-var scores, roundScore, activePlayer;
+var scores, roundScore, activePlayer, gamePlaying;
 
-    scores = [0,0];
-    roundScore = 0;
-    activePlayer = 0;
-
-
-// the bottom code changes the CSS to display the image as none
-document.querySelector('.dice').style.display = 'none';
-
-// sets the ID's to 0
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
+    init();
 
 
 
@@ -36,13 +24,15 @@ document.getElementById('current-1').textContent = '0';
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
-    // 1. Random number
-    var dice = Math.floor(Math.random() * 6) + 1;
+        if (gamePlaying) {
 
-    // 2. Display the result
-    var diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = 'dice-' + dice + '.png';
+              // 1. Random number
+        var dice = Math.floor(Math.random() * 6) + 1;
+
+        // 2. Display the result
+        var diceDOM = document.querySelector('.dice');
+        diceDOM.style.display = 'block';
+        diceDOM.src = 'dice-' + dice + '.png';
 
 
     // 3. Update the roundscore IF the rolled number was not a 1
@@ -63,12 +53,16 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 
     }
 
+ }
+
 
 });
 
         // event handler for Hold button
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
+
+    if (gamePlaying) {
 
         // Add CURRENT score to GLOBAL Score
         scores[activePlayer] += roundScore;
@@ -78,21 +72,22 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
 
         if (scores[activePlayer] >= 20) {
 
-            document.querySelector('#name-' + activePlayer).textContent = 'WINNER!!';
-            document.querySelector('.dice').style.display = 'none';
-            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-
+        document.querySelector('#name-' + activePlayer).textContent = 'WINNER!!';
+        document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        // setting the state variable to false stops the game at 100
+        gamePlaying = false;
 
         } else {
-
             // Check if player won the game
             nextPlayer();
 
         }
 
 
-    });
+    }
+});
 
 
 
@@ -115,9 +110,32 @@ function nextPlayer() {
 
 
 
+document.querySelector('.btn-new').addEventListener('click', init);
 
+function init() {
 
+        scores = [0,0];
+        roundScore = 0;
+        activePlayer = 0;
+        gamePlaying = true;
+        // the bottom code changes the CSS to display the image as none
+        document.querySelector('.dice').style.display = 'none';
 
+        // sets the ID's to 0
+        document.getElementById('score-0').textContent = '0';
+        document.getElementById('score-1').textContent = '0';
+        document.getElementById('current-0').textContent = '0';
+        document.getElementById('current-1').textContent = '0';
+        document.getElementById('name-0').textContent = 'Player 1';
+        document.getElementById('name-1').textContent = 'Player 2';
+
+        document.querySelector('.player-0-panel').classList.remove('winner');
+        document.querySelector('.player-1-panel').classList.remove('winner');
+        document.querySelector('.player-0-panel').classList.remove('active');
+        document.querySelector('.player-1-panel').classList.remove('active');
+        document.querySelector('.player-0-panel').classList.add('active');
+
+}
 
 
 /* how the maths works
